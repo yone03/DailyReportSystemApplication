@@ -113,22 +113,12 @@ public class EmployeeController {
         return "redirect:/employees";
     }
 
-
-    // 従業員更新画面
-    @GetMapping(value = "/update")
-    public String edit() {
-
-        return "employees/update";
-    }
-
-    /*
     // 従業員更新画面
     @GetMapping(value = "/{code}/update")
     public String edit(@PathVariable String code, Model model) {
 
         model.addAttribute("employee", employeeService.findByCode(code));
         return "employees/update";
-    }*/
-
+    }
 
 }
