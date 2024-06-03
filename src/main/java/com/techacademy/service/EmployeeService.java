@@ -63,8 +63,10 @@ public class EmployeeService {
             if (ErrorKinds.CHECK_OK != result) {
                 return result;
             }
+        } else {
+            employee.setPassword(emp.getPassword());
         }
-        employee.setPassword(emp.getPassword());
+
         employee.setDeleteFlg(false);
 
         LocalDateTime now = LocalDateTime.now();
