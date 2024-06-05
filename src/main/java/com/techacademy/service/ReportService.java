@@ -26,18 +26,26 @@ public class ReportService {
 
     // 一覧表示処理
     public List<Report> findAll() {
-        // ログインしている社員番号取得
-        final String code = SecurityContextHolder.getContext().getAuthentication().getName();
-        // 社員番号をキーに社員情報取得
-        Employee employees = employeeRepository.findByCode(code);
+        // ログインしている社員情報取得
+        Employee employee = findEmployee();
 
-        if (employees.getRole().getValue() == "管理者") {
+        if (employee.getRole().getValue() == "管理者") {
             // ログインしているユーザーが管理者権限の場合、全ての日報表示
             return reportRepository.findAll();
         } else {
             // ログインしているユーザーが一般権限の場合、社員情報に紐づく日報表示
-            return reportRepository.findByEmployeeCode(code);
+            return reportRepository.findByEmployeeCode(employee.getCode());
         }
+    }
+
+    // ログインしている社員情報取得
+    public Employee findEmployee() {
+        // ログインしている社員番号取得
+        final String code = SecurityContextHolder.getContext().getAuthentication().getName();
+        // 社員番号をキーに社員情報取得
+        Employee employee = employeeRepository.findByCode(code);
+
+        return employee;
     }
 
 }

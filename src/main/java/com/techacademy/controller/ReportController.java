@@ -31,8 +31,9 @@ public class ReportController {
 
     // 日報新規登録画面
     @GetMapping(value = "/add")
-    public String create() {
+    public String create(Model model) {
 
+        model.addAttribute("employee", reportService.findEmployee());
         return "reports/new";
     }
 
