@@ -29,4 +29,11 @@ public class ReportController {
         return "reports/list";
     }
 
+    // 日報新規登録画面
+    @GetMapping(value = "/add")
+    public String create() {
+
+        return "reports/new";
+    }
+
 }
