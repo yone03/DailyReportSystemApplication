@@ -55,6 +55,11 @@ public class ReportService {
     @Transactional
     public ErrorKinds save(Report report) {
 
+        // ログイン中の従業員かつ入力した日付データの存在チェック
+        if(checkExistData(report)) {
+            return ErrorKinds.DATECHECK_ERROR;
+        }
+
         report.setEmployee(findEmployee());
         report.setDeleteFlg(false);
         LocalDateTime now = LocalDateTime.now();
@@ -63,6 +68,21 @@ public class ReportService {
 
         reportRepository.save(report);
         return ErrorKinds.SUCCESS;
+    }
+
+    // ログイン中の従業員かつ入力した日付データの存在チェック
+    public boolean checkExistData(Report report) {
+        boolean ret = false;
+        // ログインしている社員情報取得
+        Employee employee = findEmployee();
+        List<Report> reportList = reportRepository.findByEmployeeCode(employee.getCode());
+        // 重複チェック
+        for (Report repo: reportList) {
+            if(repo.getReportDate().equals(report.getReportDate())) {
+                ret = true;
+            }
+        }
+        return ret;
     }
 
 }
