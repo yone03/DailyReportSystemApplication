@@ -2,6 +2,7 @@ package com.techacademy.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -49,6 +50,15 @@ public class ReportService {
         Employee employee = employeeRepository.findByCode(code);
 
         return employee;
+    }
+
+    // 1件を検索
+    public Report findById(String id) {
+        // findByIdで検索
+        Optional<Report> option = reportRepository.findById(id);
+        // 取得できなかった場合はnullを返す
+        Report report = option.orElse(null);
+        return report;
     }
 
     // 日報保存

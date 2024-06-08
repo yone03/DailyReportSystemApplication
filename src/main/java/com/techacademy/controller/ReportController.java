@@ -8,12 +8,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.techacademy.constants.ErrorKinds;
 import com.techacademy.constants.ErrorMessage;
 import com.techacademy.entity.Report;
+import com.techacademy.service.EmployeeService;
 import com.techacademy.service.ReportService;
 
 @Controller
@@ -21,10 +23,12 @@ import com.techacademy.service.ReportService;
 public class ReportController {
 
     private final ReportService reportService;
+    private final EmployeeService employeeService;
 
     @Autowired
-    public ReportController(ReportService reportService) {
+    public ReportController(ReportService reportService,EmployeeService employeeService) {
         this.reportService = reportService;
+        this.employeeService = employeeService;
     }
 
     // 日報一覧画面
@@ -68,6 +72,16 @@ public class ReportController {
         }
 
         return "redirect:/reports";
+    }
+
+    // 日報詳細画面
+    @GetMapping(value = "/{id}/")
+    public String detail(@PathVariable String id, Model model) {
+
+        Report report = reportService.findById(id);
+        model.addAttribute("report", report);
+        model.addAttribute("employee", employeeService.findByCode(report.getEmployee().getCode()));
+        return "reports/detail";
     }
 
 }
