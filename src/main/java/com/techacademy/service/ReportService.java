@@ -95,4 +95,16 @@ public class ReportService {
         return ret;
     }
 
+    // 日報削除
+    @Transactional
+    public ErrorKinds delete(String id, UserDetail userDetail) {
+
+        Report report = findById(id);
+        LocalDateTime now = LocalDateTime.now();
+        report.setUpdatedAt(now);
+        report.setDeleteFlg(true);
+
+        return ErrorKinds.SUCCESS;
+    }
+
 }
