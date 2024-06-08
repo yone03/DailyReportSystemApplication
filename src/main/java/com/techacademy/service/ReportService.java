@@ -1,11 +1,14 @@
 package com.techacademy.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.techacademy.constants.ErrorKinds;
 import com.techacademy.entity.Employee;
 import com.techacademy.entity.Report;
 import com.techacademy.repository.EmployeeRepository;
@@ -46,6 +49,20 @@ public class ReportService {
         Employee employee = employeeRepository.findByCode(code);
 
         return employee;
+    }
+
+    // 日報保存
+    @Transactional
+    public ErrorKinds save(Report report) {
+
+        report.setEmployee(findEmployee());
+        report.setDeleteFlg(false);
+        LocalDateTime now = LocalDateTime.now();
+        report.setCreatedAt(now);
+        report.setUpdatedAt(now);
+
+        reportRepository.save(report);
+        return ErrorKinds.SUCCESS;
     }
 
 }
