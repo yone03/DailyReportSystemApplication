@@ -53,7 +53,7 @@ public class ReportService {
     }
 
     // 1件を検索
-    public Report findById(String id) {
+    public Report findById(int id) {
         // findByIdで検索
         Optional<Report> option = reportRepository.findById(id);
         // 取得できなかった場合はnullを返す
@@ -97,13 +97,36 @@ public class ReportService {
 
     // 日報削除
     @Transactional
-    public ErrorKinds delete(String id, UserDetail userDetail) {
+    public ErrorKinds delete(int id, UserDetail userDetail) {
 
         Report report = findById(id);
         LocalDateTime now = LocalDateTime.now();
         report.setUpdatedAt(now);
         report.setDeleteFlg(true);
 
+        return ErrorKinds.SUCCESS;
+    }
+
+    // 日報更新
+    @Transactional
+    public ErrorKinds update(Report report,Employee employee) {
+
+        // 画面で表示中の日付と元データの違う場合は、日付データ存在チェック
+        Optional<Report> ret = reportRepository.findById(report.getId());
+        if (!ret.get().getReportDate().equals(report.getReportDate())) {
+            // ログイン中の従業員かつ入力した日付データの存在チェック
+            if(checkExistData(report)) {
+                return ErrorKinds.DATECHECK_ERROR;
+            }
+        }
+
+        report.setEmployee(employee);
+        report.setDeleteFlg(false);
+        LocalDateTime now = LocalDateTime.now();
+        report.setCreatedAt(now);
+        report.setUpdatedAt(now);
+
+        reportRepository.save(report);
         return ErrorKinds.SUCCESS;
     }
 

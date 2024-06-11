@@ -19,7 +19,7 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-body">
-                            <form th:object="${report}" >
+                            <form th:action="@{/reports/{id}/update(id=${report.id})}" th:object="${report}" th:method="post">
                                 <div class="wizard wizard-success mb-4">
                                     <div class="mb-3">
                                         <label class="form-label">日付</label>
