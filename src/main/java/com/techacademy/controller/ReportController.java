@@ -100,4 +100,14 @@ public class ReportController {
         return "redirect:/reports";
     }
 
+    // 日報更新画面
+    @GetMapping(value = "/{id}/update")
+    public String edit(@PathVariable String id, Model model) {
+
+        Report report = reportService.findById(id);
+        model.addAttribute("report", report);
+        model.addAttribute("employee", employeeService.findByCode(report.getEmployee().getCode()));
+        return "reports/update";
+    }
+
 }
