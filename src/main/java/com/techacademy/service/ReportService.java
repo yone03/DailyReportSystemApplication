@@ -38,7 +38,7 @@ public class ReportService {
             return reportRepository.findAll();
         } else {
             // ログインしているユーザーが一般権限の場合、社員情報に紐づく日報表示
-            return reportRepository.findByEmployeeCode(employee.getCode());
+            return findByEmployee(employee);
         }
     }
 
@@ -59,6 +59,11 @@ public class ReportService {
         // 取得できなかった場合はnullを返す
         Report report = option.orElse(null);
         return report;
+    }
+
+    // 社員情報にひもづく日報リストを取得
+    public List<Report> findByEmployee(Employee employee) {
+        return reportRepository.findByEmployeeCode(employee.getCode());
     }
 
     // 日報保存
@@ -97,7 +102,7 @@ public class ReportService {
 
     // 日報削除
     @Transactional
-    public ErrorKinds delete(int id, UserDetail userDetail) {
+    public ErrorKinds delete(int id) {
 
         Report report = findById(id);
         LocalDateTime now = LocalDateTime.now();
