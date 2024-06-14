@@ -120,6 +120,7 @@ public class ReportController {
 
         // 入力チェック
         if (res.hasErrors()) {
+            model.addAttribute("employee", emp);
             return "reports/update";
         }
 
